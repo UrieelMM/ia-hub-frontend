@@ -1,0 +1,1 @@
+export const urlProd = "https://ai-create-hub-877e33d37582.herokuapp.com"
