@@ -3,86 +3,89 @@
 @tailwind utilities;
 
 h1 {
-    @apply text-3xl font-bold mb-4;
+  @apply text-3xl font-bold mb-4;
+}
+
+h2 {
+  @apply text-2xl font-bold mb-4 text-emerald-400 underline;
+}
+
+h3 {
+  @apply text-2xl font-bold mb-4 text-emerald-400 underline;
+}
+
+h4 strong {
+  @apply text-sm font-bold mb-4 text-emerald-400 underline;
+}
+
+p {
+  @apply mb-4;
+}
+
+audio {
+  padding: 5px 0;
+}
+
+ul {
+  @apply list-disc list-inside;
+}
+
+ul li {
+  @apply mb-2;
+}
+
+ol li {
+  @apply mb-2;
+}
+
+strong {
+  @apply font-bold text-emerald-400 text-xl mt-4;
+}
+
+em {
+  @apply italic text-pink-500;
+}
+
+li strong {
+  @apply font-bold text-emerald-400 text-sm mt-4;
+}
+
+p>strong {
+  @apply font-bold text-emerald-400 text-xl mt-6 mb-6;
+}
+
+
+.btn-primary {
+  @apply bg-emerald-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-cyan-700 transition-all duration-200 ease-in-out;
+}
+
+.btn-primary:disabled {
+  @apply bg-emerald-500 text-white font-bold py-2 px-4 rounded-xl opacity-50 cursor-not-allowed;
+}
+
+.chat-container {
+  @apply flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white bg-opacity-5 h-full p-0 lg:p-4;
+}
+
+.chat-messages {
+  @apply flex flex-col h-full overflow-x-auto mb-4 overflow-scroll;
+}
+
+
+.fade-in {
+  animation: fadeIn .3s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-  
-  h2 {
-    @apply text-2xl font-bold mb-4 text-emerald-400 underline;
-  }
-  
-  h3{
-    @apply text-2xl font-bold mb-4 text-emerald-400 underline;
-  }
-   h4 strong {
-    @apply text-sm font-bold mb-4 text-emerald-400 underline;
-   }
-  
-  p {
-    @apply mb-4;
-  }
-  
-  audio{
-    padding: 5px 0;
-  }
-  
-  ul {
-    @apply list-disc list-inside;
-  }
-  
-  ul li{
-    @apply mb-2;
-  }
-  ol li{
-    @apply mb-2;
-  }
-  
-  strong {
-    @apply font-bold text-emerald-400 text-xl mt-4;
-  }
-  
-  em {
-    @apply italic text-pink-500;
-  }
-  
-  li strong {
-    @apply font-bold text-emerald-400 text-sm mt-4;
-  }
-  
-  p > strong {
-    @apply font-bold text-emerald-400 text-xl mt-6 mb-6;
-  }
-  
-  
-  .btn-primary {
-    @apply bg-emerald-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-cyan-700 transition-all duration-200 ease-in-out;
-  }
-  
-  .btn-primary:disabled {
-    @apply bg-emerald-500 text-white font-bold py-2 px-4 rounded-xl opacity-50 cursor-not-allowed;
-  }
-  
-  .chat-container {
-    @apply flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white bg-opacity-5 h-full p-0 lg:p-4;
-  }
-  
-  .chat-messages {
-    @apply flex flex-col h-full overflow-x-auto mb-4 overflow-scroll;
-  }
-  
-  
-  /* Animations */
-  
-  .fade-in { animation: fadeIn .3s; }
-  
-  @keyframes fadeIn {
-    0% { opacity: 0; }
 }
 
 [role="separator"]::marker {
   font-size: 0 !important;
 }
 
-/* Chrome y Safari */
 ::-webkit-scrollbar {
   width: 4px !important;
 }

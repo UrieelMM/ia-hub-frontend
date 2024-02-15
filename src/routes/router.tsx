@@ -1,6 +1,7 @@
 import ChatIAPage from "../theme/pages/assistant/ChatIAPage";
 import AudioToTextPage from "../theme/pages/audio-to-text/AudioToTextPage";
 import ImageGenerationPage from "../theme/pages/image-generate/ImageGenerationPage";
+import TextToAudioPage from "../theme/pages/text-to-audio/TextToAudioPage.tsx";
 
 
 
@@ -22,6 +23,12 @@ export const menuRoutes = [
     title: 'Audio a Texto',
     description: 'Convierte audio a texto con IA',
     component: <AudioToTextPage />,
+  },
+  {
+    to: '/text-to-audio',
+    title: 'Texto a Audio',
+    description: 'Convierte texto a audio con IA',
+    component: <TextToAudioPage />,
   },
 ];
 
