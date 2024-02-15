@@ -4,9 +4,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup
 } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { signInWithPopup } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, provider } from "../firebase/firebase";
 
 interface User {
@@ -19,7 +19,7 @@ interface User {
 
 interface AuthStore {
   user: User | null;
-  userError: string | null; // Nuevo estado para almacenar el mensaje de error
+  userError: string | null;
   loginUser: (user: User) => void;
   loginWithEmailAndPassword?: (user: {
     email: string;
@@ -74,7 +74,6 @@ const useAuthStore = create<AuthStore>((set) => ({
       photoURL: registeredUser.photoURL || "",
       displayName: registeredUser.displayName,
     });
-
     set({ user: registeredUser, userError: null });
     return registeredUser;
   },
@@ -114,7 +113,6 @@ const useAuthStore = create<AuthStore>((set) => ({
         photoURL: googleUser.photoURL,
         displayName: googleUser.displayName,
       });
-
       set({ user: googleUser, userError: null });
       return googleUser;
     } catch (error: any) {
@@ -127,16 +125,37 @@ const useAuthStore = create<AuthStore>((set) => ({
     try {
       const response: UserCredential = await signInWithPopup(auth, provider);
       const googleUser: User = {
-        email: response.user?.email || "",
-        displayName: response.user?.displayName || "",
-        photoURL: response.user?.photoURL || "",
-        uid: response.user?.uid || "",
+        email: response.user?.email || '',
+        displayName: response.user?.displayName || '',
+        photoURL: response.user?.photoURL || '',
+        uid: response.user?.uid || '',
       };
 
-      set({ user: googleUser, userError: null });
-      return googleUser;
+      // Verificar si el documento ya existe en Firestore
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, 'users', response.user?.uid);
+
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {
+        // Si el documento ya existe, utiliza los datos existentes
+        const existingUserData = userDocSnapshot.data();
+        set({ user: { ...googleUser, ...existingUserData }, userError: null });
+        return { ...googleUser, ...existingUserData };
+      } else {
+        // Si el documento no existe, créalo en Firestore
+        await setDoc(userDocRef, {
+          uid: response.user?.uid,
+          email: googleUser.email,
+          photoURL: googleUser.photoURL,
+          displayName: googleUser.displayName,
+        });
+
+        set({ user: googleUser, userError: null });
+        return googleUser;
+      }
     } catch (error: any) {
-      console.error("Error al iniciar sesión con Google:", error.message);
+      console.error('Error al iniciar sesión con Google:', error.message);
       return null;
     }
   },

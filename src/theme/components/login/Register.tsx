@@ -4,6 +4,7 @@ import { Input, Checkbox, Button, Divider, Link } from "@nextui-org/react";
 import { Notify } from "..";
 import useAuthStore from "../../../../store/authStore";
 import useUserStore from "../../../../store/userStore";
+import useLoadingStore from "../../../../store/loadingStore";
 
 interface Props {
   toggleVisibility: () => void;
@@ -28,10 +29,10 @@ export const Register = ({
   password,
   isVisible,
 }: Props) => {
-
   const registerWithGoogle = useAuthStore((state) => state.registerWithGoogle);
   const registerUser = useAuthStore((state) => state.registerUser);
   const userError = useAuthStore((state) => state.userError);
+  const setLoading = useLoadingStore((state) => state.setLoading);
 
   const fetchUser = useUserStore((state) => state.fetchUser);
 
@@ -39,17 +40,26 @@ export const Register = ({
 
   const handleRegisterWithGoogle = async () => {
     try {
+      setLoading(true);
       const response = await registerWithGoogle();
-      Notify({ type: "success", message: "Inicio de sesión exitoso" });
       navigate("/");
       fetchUser(response?.uid || "");
+      setTimeout(() => {
+        setLoading(false);
+        Notify({
+          type: "success",
+          message: "Usuario registrado correctamente",
+        });
+      }, 1000);
     } catch (error: any) {
       console.error("Error al registrarte con Google:", error.message);
+      setLoading(false);
       Notify({ type: "error", message: "Error al registrarte con Google" });
     }
   };
 
   const handleRegister = async (e: React.SyntheticEvent) => {
+    setLoading(true);
     e.preventDefault();
 
     if (!email || !password || !displayName) {
@@ -62,19 +72,22 @@ export const Register = ({
         password,
         displayName,
       });
-      
+
       if (userError) {
         Notify({ type: "error", message: userError });
       }
 
       if (registeredUser) {
+        navigate("/");
+        fetchUser(registeredUser?.uid || "");
+      }
+      setTimeout(() => {
+        setLoading(false);
         Notify({
           type: "success",
           message: "Usuario registrado correctamente",
         });
-        navigate("/");
-        fetchUser(registeredUser?.uid || "");
-      }
+      }, 1000);
       setEmail("");
       setPassword("");
       setDisplayName("");
@@ -94,11 +107,11 @@ export const Register = ({
         default:
           break;
       }
-
+      setLoading(false);
       Notify({ type: "error", message: errorMessage });
     }
   };
-  
+
   return (
     <div className="flex w-full items-center justify-center bg-background lg:w-1/2 ">
       <div className="flex h-full w-full items-center mt-10 md:mt-0 justify-center">
@@ -189,4 +202,3 @@ export const Register = ({
     </div>
   );
 };
-

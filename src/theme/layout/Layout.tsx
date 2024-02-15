@@ -1,35 +1,39 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  ScrollShadow,
-  Spacer,
-  Tooltip,
-} from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
+import { Button, ScrollShadow, Spacer, Tooltip } from "@nextui-org/react";
+import { Loading, Notify, Sidebar } from "../components";
 import { Icon } from "@iconify/react";
 import { useMediaQuery } from "usehooks-ts";
+import { auth } from "../../../firebase/firebase";
 import useAuthStore from "../../../store/authStore";
 import useUserStore from "../../../store/userStore";
+import useLoadingStore from "../../../store/loadingStore";
 
 import { sectionItemsWithTeams } from "../components/sidebar/SidebarItems";
 import { cn } from "../../../utils/tailwindconfig";
 
-import { Notify, Sidebar } from "../components";
+interface Props {
+  children: React.ReactNode;
+}
 
-export const Layout = () => {
+export const Layout = ({ children }: Props) => {
   const isCompact = useMediaQuery("(max-width: 768px)");
   const [currentPath, setCurrentPath] = useState<string>("");
 
   const logoutUser = useAuthStore((state) => state.logoutUser);
-  const {user, fetchUser, setUser }= useUserStore();
+  const { user, fetchUser, setUser } = useUserStore();
+  const loading = useLoadingStore((state) => state.loading);
+
+  const [loadingSession, setLoadingSession] = useState(false);
+  const [componentIsVisible, setComponentIsVisible] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const uid = user?.uid; // Reemplaza esto con la lógica que obtiene el uid
     if (!user) {
-      const userFromLocalStorage = localStorage.getItem('userIAHUB');
+      const userFromLocalStorage = localStorage.getItem("userIAHUB");
       if (userFromLocalStorage) {
         setUser(JSON.parse(userFromLocalStorage));
       } else if (uid) {
@@ -54,7 +58,29 @@ export const Layout = () => {
     setCurrentPath(currentPath);
   }, []);
 
-  return (
+  useEffect(() => {
+    setLoadingSession(true);
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          navigate("/login");
+        }
+      });
+      setTimeout(() => {
+        setLoadingSession(false); 
+        setComponentIsVisible(true);
+      }, 500);
+      return () => unsubscribe();
+  }, [navigate]);
+
+  if (loadingSession) {
+    return <Loading />;
+  }
+
+  if (!componentIsVisible) {
+    return null;
+  }
+
+  return loading === false ? (
     <div className="flex w-full" style={{ height: "90vh" }}>
       <div
         style={{ minHeight: "97vh" }}
@@ -78,7 +104,7 @@ export const Layout = () => {
             <img
               className="w-12 rounded-full"
               src="https://res.cloudinary.com/dz5tntwl1/image/upload/v1707862083/_81fceb6f-a735-4a87-840e-d444994d21a3_kpnsko.jpg"
-              alt="Centro educativo héroes de la fe"
+              alt="IA HUB Logo"
             />
           </div>
           <span
@@ -90,13 +116,18 @@ export const Layout = () => {
           </span>
         </div>
         <Spacer y={8} />
-        <div className="flex items-center gap-3 px-3">
-          <Avatar
-            isBordered
-            className="flex-none"
-            size="sm"
-            src={user?.photoURL || ""}
-          />
+        <div className="flex items-center gap-3 lg:px-3 ">
+          {user?.photoURL ? (
+            <img
+              alt={user?.displayName || user?.email || "Usuario"}
+              className="flex-none rounded-full w-8 lg:object-cover lg:rounded-lg lg:w-16"
+              src={user?.photoURL || ""}
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center lg:object-cover lg:rounded-lg lg:w-16 lg:h-16 bg-emerald-300 bg-opacity-70 justify-center rounded-full">
+              <span>{user?.displayName?.charAt(0).toUpperCase()}</span>
+            </div>
+          )}
           <div
             className={cn("flex max-w-full flex-col", { hidden: isCompact })}
           >
@@ -104,7 +135,7 @@ export const Layout = () => {
               {user?.displayName || user?.email || "Usuario"}
             </p>
             <p className="truncate text-tiny text-default-400">
-              Product Designer
+              {user?.email || "Usuario"}
             </p>
           </div>
         </div>
@@ -140,7 +171,7 @@ export const Layout = () => {
                 isCompact ? null : (
                   <Icon
                     className="flex-none text-default-500"
-                    icon="ph:warning-circle"
+                    icon="icon-park-outline:config"
                     width={24}
                   />
                 )
@@ -150,11 +181,11 @@ export const Layout = () => {
               {isCompact ? (
                 <Icon
                   className="text-default-500"
-                  icon="ph:warning-circle"
+                  icon="icon-park-outline:config"
                   width={24}
                 />
               ) : (
-                "Ayuda e información"
+                "Configuración"
               )}
             </Button>
           </Tooltip>
@@ -204,13 +235,15 @@ export const Layout = () => {
         </header>
         <main className="mt-4 h-full w-full overflow-hidden">
           <div className="flex h-[100%] w-full flex-col gap-4 p-2 rounded-medium border-small border-divider">
-            <Outlet />
+            {/* <Outlet /> */}
+            {children}
           </div>
         </main>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 };
 
 export default Layout;
-

@@ -1,6 +1,9 @@
 "use client";
-import { useState } from "react";
-import { SignIn, Register } from "../../components/";
+import { useState, useEffect } from "react";
+import { SignIn, Register, Loading } from "../../components/";
+import { auth } from "../../../../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+
 
 export const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -9,10 +12,37 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
 
+  const [loasingSession, setLoadingSession] = useState(false);
+  const [componentIsVisible, setComponentIsVisible] = useState(false);
+
   const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleLogin = () => setIsLogin(!isLogin);
 
-  return (
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoadingSession(true);
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (user) {
+          navigate("/");
+        }
+      });
+      setTimeout(() => {
+        setLoadingSession(false);
+        setComponentIsVisible(true);
+      }, 500);
+      return () => unsubscribe();
+  }, [navigate]);
+
+  if (loasingSession) {
+    return <Loading />;
+  }
+
+  if (!componentIsVisible) {
+    return null;
+  }
+
+  return  (
     <div className="relative flex h-screen w-screen">
       {/* Brand Logo */}
       <div className="absolute left-2 top-5 lg:left-5">

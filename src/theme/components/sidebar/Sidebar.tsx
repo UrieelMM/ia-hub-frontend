@@ -2,6 +2,7 @@
 
 import type {ListboxProps, ListboxSectionProps, Selection} from "@nextui-org/react";
 
+
 import React from "react";
 import {Listbox, Tooltip, ListboxItem, ListboxSection} from "@nextui-org/react";
 import {Icon} from "@iconify/react";
@@ -68,8 +69,7 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
       }),
     };
 
-    const renderItem = React.useCallback(
-      (item: SidebarItem) => {
+    const renderItem = React.useCallback((item: SidebarItem) => {
         return (
           <ListboxItem
             {...item}
@@ -77,7 +77,7 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
             endContent={isCompact || hideEndContent ? null : item.endContent ?? null}
             startContent={
               isCompact ? null : item.icon ? (
-                <Icon
+                  <Icon
                   className={cn(
                     "text-default-500 group-data-[selected=true]:text-foreground",
                     iconClassName,
@@ -116,7 +116,7 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
     );
 
     return (
-      <Listbox
+        <Listbox
         key={isCompact ? "compact" : "default"}
         ref={ref}
         hideSelectedIcon
@@ -154,7 +154,7 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
               showDivider={isCompact}
               title={item.title}
             >
-              {item.items.map(renderItem)}
+                {item.items.map(renderItem)}
             </ListboxSection>
           ) : (
             renderItem(item)

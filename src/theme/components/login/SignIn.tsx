@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Divider, Input, Checkbox, Link } from "@nextui-org/react";
 import useAuthStore from "../../../../store/authStore";
-import { Notify } from "..";
+import useUserStore from "../../../../store/userStore";
+import useLoadingStore from "../../../../store/loadingStore";
+import { Notify } from "../";
 
 interface Props {
   toggleVisibility: () => void;
@@ -22,6 +24,8 @@ export const SignIn = ({
   );
   const loginUser = useAuthStore((state) => state.loginUser);
   const loginWithGoogle = useAuthStore((state) => state.loginWithGoogle);
+  const setLoading = useLoadingStore((state) => state.setLoading);
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,14 +39,17 @@ export const SignIn = ({
       Notify({ type: "info", message: "Todos los campos son obligatorios" });
       return;
     }
-
+    setLoading(true);
     try {
       const loggedUser = await loginWithEmailAndPassword!({ email, password });
       if (loggedUser) {
-        Notify({ type: "success", message: "Inicio de sesión exitoso" });
         navigate("/");
-        console.log(loggedUser);
+        fetchUser(loggedUser?.uid || "");
       }
+      setTimeout(() => {
+        setLoading(false);
+        Notify({ type: "success", message: "Inicio de sesión exitoso" });
+      }, 1000);
     } catch (error: any) {
       let errorMessage = "Error al iniciar sesión:";
       switch (error.code) {
@@ -59,12 +66,13 @@ export const SignIn = ({
           errorMessage += " " + error.message;
           break;
       }
+      setLoading(false);
       Notify({ type: "error", message: errorMessage });
-      console.error(errorMessage);
     }
   };
 
   const handleLoginWithGoogle = async () => {
+    setLoading(true);
     try {
       const response = await loginWithGoogle!();
       loginUser({
@@ -73,11 +81,16 @@ export const SignIn = ({
         photoURL: response!.photoURL,
         uid: response!.uid,
       });
-      Notify({ type: "success", message: "Inicio de sesión exitoso" });
       navigate("/");
+      fetchUser(response?.uid || "");
+      setTimeout(() => {
+        setLoading(false);
+        Notify({ type: "success", message: "Inicio de sesión exitoso" });
+      }, 1000);
     } catch (error: any) {
-      console.error("Error al registrarte con Google:", error.message);
-      Notify({ type: "error", message: "Error al registrarte con Google" });
+      console.error("Error al iniciar sesión con Google:", error.message);
+      setLoading(false);
+      Notify({ type: "error", message: "Error al iniciar sesion con Google" });
     }
   };
 
@@ -97,7 +110,7 @@ export const SignIn = ({
             startContent={<Icon icon="flat-color-icons:google" width={24} />}
             variant="bordered"
           >
-            Continue with Google
+            Continuar con Google
           </Button>
         </div>
 
