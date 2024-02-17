@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, ScrollShadow, Spacer, Tooltip } from "@nextui-org/react";
 import { Loading, Notify, Sidebar } from "../components";
 import { Icon } from "@iconify/react";
@@ -119,9 +119,9 @@ export const Layout = ({ children }: Props) => {
         <div className="flex items-center gap-3 lg:px-3 ">
           {user?.photoURL ? (
             <img
-              alt={user?.displayName || user?.email || "Usuario"}
+              alt={user?.displayName || "Usuario"}
               className="flex-none rounded-full w-8 lg:object-cover lg:rounded-lg lg:w-16"
-              src={user?.photoURL || ""}
+              src={user.photoURL}
             />
           ) : (
             <div className="flex h-8 w-8 items-center lg:object-cover lg:rounded-lg lg:w-16 lg:h-16 bg-emerald-300 bg-opacity-70 justify-center rounded-full">
@@ -153,42 +153,88 @@ export const Layout = ({ children }: Props) => {
             "items-center": isCompact,
           })}
         >
-          <Tooltip
-            content="Help & Feedback"
+           <Tooltip
+            content="User Galery"
             isDisabled={!isCompact}
             placement="right"
           >
-            <Button
-              fullWidth
-              className={cn(
-                "justify-start truncate text-default-500 data-[hover=true]:text-foreground",
-                {
-                  "justify-center": isCompact,
+            <Link to="/user-galery">
+              <Button
+                fullWidth
+                className={cn(
+                  "justify-start truncate text-default-500 data-[hover=true]:text-foreground",
+                  {
+                    "justify-center": isCompact,
+                  }
+                )}
+                isIconOnly={isCompact}
+                startContent={
+                  isCompact ? null : (
+                      <Icon
+                        className="text-default-500"
+                        icon="fluent-mdl2:photo-collection"
+                        width={24}
+                      />
+                  )
                 }
-              )}
-              isIconOnly={isCompact}
-              startContent={
-                isCompact ? null : (
-                  <Icon
-                    className="flex-none text-default-500"
-                    icon="icon-park-outline:config"
-                    width={24}
-                  />
-                )
-              }
-              variant="light"
-            >
-              {isCompact ? (
-                <Icon
-                  className="text-default-500"
-                  icon="icon-park-outline:config"
-                  width={24}
-                />
-              ) : (
-                "Configuración"
-              )}
-            </Button>
+                variant="light"
+              >
+                {isCompact ? (
+                <Link to="/user-galery">
+                    <Icon
+                      className="text-default-500"
+                      icon="fluent-mdl2:photo-collection"
+                      width={24}
+                    />
+                </Link>
+                ) : (
+                  "Galería"
+                )}
+              </Button>
+            </Link>
           </Tooltip>
+          
+          <Tooltip
+            content="User Configuration"
+            isDisabled={!isCompact}
+            placement="right"
+          >
+            <Link to="/user-configuration">
+              <Button
+                fullWidth
+                className={cn(
+                  "justify-start truncate text-default-500 data-[hover=true]:text-foreground",
+                  {
+                    "justify-center": isCompact,
+                  }
+                )}
+                isIconOnly={isCompact}
+                startContent={
+                  isCompact ? null : (
+                      <Icon
+                        className="text-default-500"
+                        icon="icon-park-outline:config"
+                        width={24}
+                      />
+                  )
+                }
+                variant="light"
+              >
+                {isCompact ? (
+                <Link to="/user-configuration">
+                    <Icon
+                      className="text-default-500"
+                      icon="icon-park-outline:config"
+                      width={24}
+                    />
+                </Link>
+                ) : (
+                  "Configuración"
+                )}
+              </Button>
+            </Link>
+          </Tooltip>
+          
           <Tooltip content="Log Out" isDisabled={!isCompact} placement="right">
             <Button
               onClick={handleLogout}

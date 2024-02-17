@@ -28,8 +28,8 @@ export const MyMessages = ({ message }: Props) => {
          <div className="w-10 h-10 rounded-lg flex-shrink-0">
              <img
                 className="rounded-lg w-10 h-10 object-cover"
-                src={user?.photoURL || ""}
-                alt={user?.displayName || user?.email || "Usuario"}
+                src={user?.photoURL}
+                alt={user?.displayName || "Usuario"}
             />
          </div>
         ) : (

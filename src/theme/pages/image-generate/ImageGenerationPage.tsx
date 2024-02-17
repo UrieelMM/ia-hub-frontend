@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { imageGenerationCase } from "../../../core";
 import { IAMessages, IAMessageImages, MyMessages, TypingLoading, ChatInputBox } from "../../components";
+import useGeneratedUserStore from "../../../../store/generatedUserStore";
 
 interface Message {
   message: string;
@@ -14,6 +15,8 @@ interface Message {
 const ImageGenerationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+
+  const {addGeneratedImage} = useGeneratedUserStore();
 
   const handlePostMessage = async (message: string) => {
     setIsLoading(true);
@@ -29,13 +32,13 @@ const ImageGenerationPage = () => {
         { message: "No pude generar la imagen", isGpt: true },
       ]);
     }
-
+    const urlImage = await addGeneratedImage(imageInfo.url);
     setMessages((prev) => [
       ...prev,
       {
         message: message,
         isGpt: true,
-        info: { url: imageInfo.url, alt: imageInfo.alt },
+        info: { url: urlImage, alt: imageInfo.alt },
       },
     ]);
   };
@@ -75,3 +78,4 @@ const ImageGenerationPage = () => {
 };
 
 export default ImageGenerationPage;
+

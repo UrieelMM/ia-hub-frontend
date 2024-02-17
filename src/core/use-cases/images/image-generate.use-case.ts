@@ -5,6 +5,7 @@ type GeneratedImage = ImageGenerationCase | null;
 interface ImageGenerationCase {
     url: string;
     alt: string;
+    openAIUrl: string;
 }
 
 
@@ -23,11 +24,12 @@ export const imageGenerationCase = async (prompt: string, originalImage?: string
             })
         });
 
-        const { url, revised_prompt } = await response.json();
+        const { url, revised_prompt, openAIUrl } = await response.json();
 
         return {
             url,
-            alt: revised_prompt
+            alt: revised_prompt,
+            openAIUrl
         }
     } catch (error) {
         console.log(error);

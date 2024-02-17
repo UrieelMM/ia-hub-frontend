@@ -50,7 +50,7 @@ export const Register = ({
           type: "success",
           message: "Usuario registrado correctamente",
         });
-      }, 1000);
+      }, 1500);
     } catch (error: any) {
       console.error("Error al registrarte con Google:", error.message);
       setLoading(false);
