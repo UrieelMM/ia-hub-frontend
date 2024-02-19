@@ -17,6 +17,7 @@ interface Props {
   children: React.ReactNode;
 }
 
+
 export const Layout = ({ children }: Props) => {
   const isCompact = useMediaQuery("(max-width: 768px)");
   const [currentPath, setCurrentPath] = useState<string>("");

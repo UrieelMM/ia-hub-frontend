@@ -4,6 +4,8 @@ import ImageGenerationPage from "../theme/pages/image-generate/ImageGenerationPa
 import ConfigurationPage from "../theme/pages/configuration/ConfigurationPage";
 import TextToAudioPage from "../theme/pages/text-to-audio/TextToAudioPage";
 import GaleryPage from "../theme/pages/galery/GaleryPage";
+import TranslatePage from "../theme/pages/translate/TranslatePage";
+import ComparisonsPage from "../theme/pages/comparisons/ComparisonsPage";
 
 
 
@@ -43,6 +45,18 @@ export const menuRoutes = [
     title: 'Configuración de Usuario',
     description: 'Configuración de usuario para cambiar datos personales',
     component: <ConfigurationPage />,
+  },
+  {
+    to: '/translate',
+    title: 'Traductor',
+    description: 'Traduce texto a diferentes idiomas',
+    component: <TranslatePage />,
+  },
+  {
+    to: '/comparisons',
+    title: 'Comparaciones',
+    description: 'Comparaciones entre productos o servicios',
+    component: <ComparisonsPage />,
   },
 ];
 

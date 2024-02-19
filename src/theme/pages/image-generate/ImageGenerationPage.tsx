@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { imageGenerationCase } from "../../../core";
 import { IAMessages, IAMessageImages, MyMessages, TypingLoading, ChatInputBox } from "../../components";
 import useGeneratedUserStore from "../../../../store/generatedUserStore";
@@ -16,15 +16,28 @@ const ImageGenerationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
+    // Scroll to the bottom when messages change
+    useEffect(() => {
+      if (messagesRef.current) {
+        messagesRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, [messages]);
+
   const {addGeneratedImage} = useGeneratedUserStore();
 
   const handlePostMessage = async (message: string) => {
     setIsLoading(true);
     setMessages((prev) => [...prev, { message: message, isGpt: false }]);
 
+    if (messagesRef.current) {
+      messagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+
     //TODO: USE CASE
     const imageInfo = await imageGenerationCase(message);
-    setIsLoading(false);
 
     if (!imageInfo) {
       return setMessages((prev) => [
@@ -32,15 +45,16 @@ const ImageGenerationPage = () => {
         { message: "No pude generar la imagen", isGpt: true },
       ]);
     }
-    const urlImage = await addGeneratedImage(imageInfo.url);
+    const urlImage = await addGeneratedImage(imageInfo.url,message);
     setMessages((prev) => [
       ...prev,
       {
         message: message,
         isGpt: true,
-        info: { url: urlImage, alt: imageInfo.alt },
+        info: { url: urlImage || "", alt: imageInfo.alt },
       },
     ]);
+    setIsLoading(false);
   };
 
   return (
@@ -65,6 +79,7 @@ const ImageGenerationPage = () => {
               <TypingLoading />
             </div>
           )}
+           <div ref={messagesRef} />
         </div>
       </div>
 

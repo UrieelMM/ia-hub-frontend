@@ -1,7 +1,8 @@
 // userStore.ts
 
 import { create } from 'zustand';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth } from "../firebase/firebase";
 
 interface User {
   email: string;
@@ -15,6 +16,8 @@ interface UserStore {
   user: User | null;
   fetchUser: (uid: string) => Promise<void>;
   setUser: (user: User) => void;
+  setThreadIdStudyAssistant: (threadId: string) => void;
+  getThreadIdStudyAssistant: () => string | Promise<any>;
 }
 
 const useUserStore = create<UserStore>((set) => ({
@@ -48,6 +51,35 @@ const useUserStore = create<UserStore>((set) => ({
       localStorage.removeItem('userIAHUB');
     }
   },
+  setThreadIdStudyAssistant: (threadId: string) =>{
+    const currentUser = auth.currentUser;
+    if(currentUser){
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      setDoc(userDocRef, { threadIdStudyAssistant: threadId }, { merge: true });
+    }
+  },
+  getThreadIdStudyAssistant: () => {
+    const currentUser = auth.currentUser;
+    if(currentUser){
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      const userDocSnapshot = getDoc(userDocRef);
+      return userDocSnapshot.then((doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          return data.threadIdStudyAssistant;
+        } else {
+          console.log('No such document!');
+          return '';
+        }
+      }).catch((error) => {
+        console.log('Error getting document:', error);
+        return '';
+      });
+    }
+    return '';
+  }
 }));
 
 export default useUserStore;

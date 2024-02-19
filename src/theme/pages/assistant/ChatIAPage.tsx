@@ -1,6 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { createThreadCase, getListMessagesCase, postQuestionCase } from "../../../core";
-import { IAMessages, MyMessages, TypingLoading, ChatInputBox } from "../../components";
+import {
+  createThreadCase,
+  getListMessagesCase,
+  postQuestionCase,
+} from "../../../core";
+import {
+  IAMessages,
+  MyMessages,
+  TypingLoading,
+  ChatInputBox,
+} from "../../components";
+import useUserStore from "../../../../store/userStore";
 
 interface Message {
   message: string;
@@ -11,22 +21,28 @@ const ChatIAPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const [threadId, setThreadId] = useState<string>("");
+  const [threadId, setThreadId] = useState<any>("");
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  const { setThreadIdStudyAssistant, getThreadIdStudyAssistant } =
+    useUserStore();
 
   //Obtener el threadId y si no existe crear uno
 
   useEffect(() => {
-    const threadId = localStorage.getItem("threadId");
-    if (threadId) {
-      setThreadId(threadId);
-    } else {
-      createThreadCase().then((id) => {
-        setThreadId(id);
-        localStorage.setItem("threadId", id);
-      });
-    }
+    const getOrCreateThreadId = async () => {
+      const threadId = await getThreadIdStudyAssistant();
+      if (threadId) {
+        setThreadId(threadId);
+      } else {
+        createThreadCase().then((id) => {
+          setThreadId(id);
+          setThreadIdStudyAssistant(id);
+        });
+      }
+    };
+    getOrCreateThreadId();
   }, []);
 
   //get list messages when page load
@@ -114,10 +130,10 @@ const ChatIAPage = () => {
   };
 
   return (
-    <div className="chat-container" >
+    <div className="chat-container">
       <div className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
-          <IAMessages message="¡Hola! Soy tu asistente de estudio. Puedo ayudarte con cualquier duda que tengas respecto a tus materias." />
+          <IAMessages message="¡Hola! Soy tu asistente de estudio. Puedo ayudarte a preparte para tus exámenes." />
           {messages.map((message, index) =>
             message.isGpt ? (
               <IAMessages key={index} message={message.message} />

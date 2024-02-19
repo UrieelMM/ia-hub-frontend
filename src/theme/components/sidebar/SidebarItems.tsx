@@ -58,8 +58,8 @@ export const sectionItemsWithTeams: SidebarItem[] = [
         title: "Traductor",
       },
       {
-        key: "compare",
-        href: "/compare",
+        key: "comparisons",
+        href: "/comparisons",
         title: "Comparar opciones",
         icon: "fluent:branch-compare-24-filled",
       },
