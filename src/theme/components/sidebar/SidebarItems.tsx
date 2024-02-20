@@ -6,8 +6,8 @@ export const sectionItems: SidebarItem[] = [
     title: "Asistentes",
     items: [
       {
-        key: "kitchen-assistant",
-        href: "/kitchen-assistant",
+        key: "chef-assistant",
+        href: "/chef-assistant",
         title: "Asistente de Cocina",
         icon: "icon-park-outline:chef-hat-one",
       },

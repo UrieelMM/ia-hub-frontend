@@ -54,16 +54,16 @@ export const menuRoutes = [
     component: <TranslatePage />,
   },
   {
+    to: '/chef-assistant',
+    title: 'Asistente de Cocina',
+    description: 'Asistente de cocina para ayudarte a preparar deliciosas recetas de cocina',
+    component: <ChefIAPage />,
+  },
+  {
     to: '/comparisons',
     title: 'Comparaciones',
     description: 'Comparaciones entre productos o servicios',
     component: <ComparisonsPage />,
-  },
-  {
-    to: '/kitchen-assistant',
-    title: 'Asistente de Cocina',
-    description: 'Asistente de cocina para ayudarte a preparar deliciosas recetas de cocina',
-    component: <ChefIAPage />,
   },
 ];
 
