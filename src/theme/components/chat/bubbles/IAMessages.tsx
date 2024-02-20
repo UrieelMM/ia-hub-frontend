@@ -11,7 +11,7 @@ export const IAMessages = ({message}: Props) => {
             <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-600 flex-shrink-0">
                 <img className="rounded-lg" src="https://res.cloudinary.com/dz5tntwl1/image/upload/v1707862083/_81fceb6f-a735-4a87-840e-d444994d21a3_kpnsko.jpg" alt="Assistant Avatar" />
             </div>
-            <div className="relative object-cover ml-3 text-sm bg-emerald-300 bg-opacity-25 pt-3 px-3 rounded-xl">
+            <div className="relative object-cover ml-3 text-sm bg-emerald-100 bg-opacity-25 pt-3 px-3 rounded-xl">
                 <Markdown>
                     {message}
                 </Markdown>

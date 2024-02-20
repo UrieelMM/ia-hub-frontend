@@ -37,7 +37,7 @@ export const MyMessages = ({ message }: Props) => {
             {user?.displayName?.charAt(0).toUpperCase() || "Tú"}
           </div>
         )}
-        <div className="relative mr-3 text-sm bg-emerald-300 bg-opacity-70 py-1 px-2 shadow rounded-xl">
+        <div className="relative mr-3 text-sm bg-emerald-200 bg-opacity-70 py-1 px-2 shadow rounded-xl">
           <div>{message}</div>
         </div>
       </div>

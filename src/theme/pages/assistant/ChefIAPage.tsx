@@ -18,7 +18,7 @@ interface Message {
   isGpt: boolean;
 }
 
-const ChatIAPage = () => {
+const ChefIAPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -26,20 +26,20 @@ const ChatIAPage = () => {
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
-  const { setThreadIdStudyAssistant, getThreadIdStudyAssistant } =
+  const { setThreadIdChefAssistant, getThreadIdChefAssistant } =
     useUserStore();
 
   //Obtener el threadId y si no existe crear uno
 
   useEffect(() => {
     const getOrCreateThreadId = async () => {
-      const threadId = await getThreadIdStudyAssistant();
+      const threadId = await getThreadIdChefAssistant();
       if (threadId) {
         setThreadId(threadId);
       } else {
         createThreadCase().then((id) => {
           setThreadId(id);
-          setThreadIdStudyAssistant(id);
+          setThreadIdChefAssistant(id);
         });
       }
     };
@@ -96,13 +96,14 @@ const ChatIAPage = () => {
       console.warn(
         "La API tardó demasiado en responder. Recargando la página..."
       );
-      // Recarga la página después de 40 segundos si no hay respuesta
+      //limpiar mensajes
+      setMessages([]);
       getListMessages();
-    }, 50000);
+    }, 80000);
 
     try {
       // TODO: USE CASE
-      const assistantId = "asst_dmC3MwUpJztpb3L1XTuYuyCz";
+      const assistantId = "asst_tRaIc6DlzV5ETQux1GfZHS8s";
       const replies = await postQuestionCase(threadId, message, assistantId);
 
       // Limpiar mensajes
@@ -125,7 +126,7 @@ const ChatIAPage = () => {
       getListMessages();
     } finally {
       setIsLoading(false);
-      // Limpiar el temporizador si la respuesta llega antes de los 40 segundos
+      // Limpiar el temporizador si la respuesta llega antes de los 80 segundos
       clearTimeout(timeoutId);
     }
     setIsLoading(false);
@@ -135,7 +136,7 @@ const ChatIAPage = () => {
     <div className="chat-container">
       <div className="chat-messages">
         <div className="grid grid-cols-12 gap-y-2">
-          <IAMessages message="¡Hola! Soy tu asistente de estudio. Puedo ayudarte a preparte para tus exámenes." />
+          <IAMessages message="¡Hola! Soy el Chef Cookie. Estoy aquí para ayudar a preparar deliciosas recetas de cocina." />
           {messages.map((message, index) =>
             message.isGpt ? (
               <IAMessages key={index} message={message.message} />
@@ -161,4 +162,4 @@ const ChatIAPage = () => {
   );
 };
 
-export default ChatIAPage;
+export default ChefIAPage;

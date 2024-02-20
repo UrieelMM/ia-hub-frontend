@@ -39,7 +39,7 @@ ol li {
 }
 
 strong {
-  @apply font-bold text-emerald-400 text-xl mt-4;
+  @apply font-bold text-emerald-400 text-sm mt-4;
 }
 
 em {
@@ -51,7 +51,7 @@ li strong {
 }
 
 p>strong {
-  @apply font-bold text-emerald-400 text-xl mt-6 mb-6;
+  @apply font-bold text-black font-normal text-sm mt-6 mb-6;
 }
 
 

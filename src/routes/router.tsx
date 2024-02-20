@@ -6,6 +6,7 @@ import TextToAudioPage from "../theme/pages/text-to-audio/TextToAudioPage";
 import GaleryPage from "../theme/pages/galery/GaleryPage";
 import TranslatePage from "../theme/pages/translate/TranslatePage";
 import ComparisonsPage from "../theme/pages/comparisons/ComparisonsPage";
+import ChefIAPage from "../theme/pages/assistant/ChefIAPage";
 
 
 
@@ -57,6 +58,12 @@ export const menuRoutes = [
     title: 'Comparaciones',
     description: 'Comparaciones entre productos o servicios',
     component: <ComparisonsPage />,
+  },
+  {
+    to: '/kitchen-assistant',
+    title: 'Asistente de Cocina',
+    description: 'Asistente de cocina para ayudarte a preparar deliciosas recetas de cocina',
+    component: <ChefIAPage />,
   },
 ];
 

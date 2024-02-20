@@ -3,7 +3,7 @@ import { urlProd } from "../../urlPath";
 
 
 
-export const postQuestionCase = async (threadId: string, question: string) => {
+export const postQuestionCase = async (threadId: string, question: string, assistantId: string) => {
     try {
         const response = await fetch(`${urlProd}/ia-assistant/user-question`, {
             method: "POST",
@@ -13,6 +13,7 @@ export const postQuestionCase = async (threadId: string, question: string) => {
             body: JSON.stringify({
                 threadId,
                 question,
+                assistantId
             }),
         });
 

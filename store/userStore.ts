@@ -1,3 +1,4 @@
+import { set } from 'firebase/database';
 // userStore.ts
 
 import { create } from 'zustand';
@@ -18,6 +19,8 @@ interface UserStore {
   setUser: (user: User) => void;
   setThreadIdStudyAssistant: (threadId: string) => void;
   getThreadIdStudyAssistant: () => string | Promise<any>;
+  setThreadIdChefAssistant: (threadId: string) => void;
+  getThreadIdChefAssistant: () => string | Promise<any>;
 }
 
 const useUserStore = create<UserStore>((set) => ({
@@ -69,6 +72,35 @@ const useUserStore = create<UserStore>((set) => ({
         if (doc.exists()) {
           const data = doc.data();
           return data.threadIdStudyAssistant;
+        } else {
+          console.log('No such document!');
+          return '';
+        }
+      }).catch((error) => {
+        console.log('Error getting document:', error);
+        return '';
+      });
+    }
+    return '';
+  },
+  setThreadIdChefAssistant: (threadId: string) =>{
+    const currentUser = auth.currentUser;
+    if(currentUser){
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      setDoc(userDocRef, { threadIdChefAssistant: threadId }, { merge: true });
+    }
+  },
+  getThreadIdChefAssistant: () => {
+    const currentUser = auth.currentUser;
+    if(currentUser){
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      const userDocSnapshot = getDoc(userDocRef);
+      return userDocSnapshot.then((doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          return data.threadIdChefAssistant;
         } else {
           console.log('No such document!');
           return '';
