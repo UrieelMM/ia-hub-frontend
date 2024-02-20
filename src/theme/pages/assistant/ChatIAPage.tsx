@@ -37,10 +37,9 @@ const ChatIAPage = () => {
       if (threadId) {
         setThreadId(threadId);
       } else {
-        createThreadCase().then((id) => {
+        const id = await createThreadCase()
           setThreadId(id);
           setThreadIdStudyAssistant(id);
-        });
       }
     };
     getOrCreateThreadId();

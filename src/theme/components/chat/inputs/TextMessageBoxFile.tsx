@@ -33,7 +33,7 @@ export const TextMessageBoxFile = ({
   return (
     <form
       onSubmit={handleSendMessage}
-      className="flex flex-row items-center h-16 bg-white w-full px-4 rounded-xl"
+      className="flex flex-row items-center h-16 bg-white w-fullpx-0 md:px-3 lg:px-4 rounded-xl"
     >
       <div className="mr-3">
         <button
@@ -67,10 +67,12 @@ export const TextMessageBoxFile = ({
         </div>
       </div>
 
-      <div className="ml-4">
+      <div className="ml-2">
         <button className="btn-primary" disabled={!selectedFile}>
           {!selectedFile ? (
-            <span className="mr-2">Enviar</span>
+            <span>
+              <Icon icon="fa-regular:paper-plane" />
+            </span>
           ) : (
             <span className="mr-2">
               {selectedFile.name.substring(0, 15) + "..."}

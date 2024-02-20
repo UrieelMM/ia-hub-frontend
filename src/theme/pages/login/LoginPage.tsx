@@ -12,7 +12,7 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
 
-  const [loasingSession, setLoadingSession] = useState(false);
+  const [loasingSession, setLoadingSession] = useState(true);
   const [componentIsVisible, setComponentIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -55,7 +55,7 @@ export const LoginPage = () => {
             />
           </div>
           <div className="6">
-            <p className="font-medium ml-1">IA HUB</p>
+            <p className="font-medium ml-1">All Create AI</p>
           </div>
         </div>
       </div>

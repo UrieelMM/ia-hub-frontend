@@ -1,8 +1,6 @@
 import { QuestionAssistantResponse } from "../../../interfaces";
 import { urlProd } from "../../urlPath";
 
-
-
 export const postQuestionCase = async (threadId: string, question: string, assistantId: string) => {
     try {
         const response = await fetch(`${urlProd}/ia-assistant/user-question`, {

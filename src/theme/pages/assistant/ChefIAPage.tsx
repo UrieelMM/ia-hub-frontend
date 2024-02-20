@@ -19,6 +19,7 @@ interface Message {
 }
 
 const ChefIAPage = () => {
+
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -30,17 +31,15 @@ const ChefIAPage = () => {
     useUserStore();
 
   //Obtener el threadId y si no existe crear uno
-
   useEffect(() => {
     const getOrCreateThreadId = async () => {
       const threadId = await getThreadIdChefAssistant();
       if (threadId) {
         setThreadId(threadId);
       } else {
-        createThreadCase().then((id) => {
+        const id = await createThreadCase()
           setThreadId(id);
           setThreadIdChefAssistant(id);
-        });
       }
     };
     getOrCreateThreadId();
@@ -96,14 +95,12 @@ const ChefIAPage = () => {
       console.warn(
         "La API tardó demasiado en responder. Recargando la página..."
       );
-      //limpiar mensajes
-      setMessages([]);
       getListMessages();
-    }, 80000);
+    }, 70000);
 
     try {
       // TODO: USE CASE
-      const assistantId = "asst_tRaIc6DlzV5ETQux1GfZHS8s";
+      const assistantId = "asst_sgHHHYeQjjD74BJlWFbkyeYi";
       const replies = await postQuestionCase(threadId, message, assistantId);
 
       // Limpiar mensajes
@@ -123,7 +120,7 @@ const ChefIAPage = () => {
       }
     } catch (error) {
       console.error("Error al llamar a la API", error);
-      getListMessages();
+      window.location.reload();
     } finally {
       setIsLoading(false);
       // Limpiar el temporizador si la respuesta llega antes de los 80 segundos

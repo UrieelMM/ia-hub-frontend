@@ -1,3 +1,4 @@
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { FormEvent, useState } from "react";
 
 interface Props {
@@ -20,7 +21,7 @@ export const ChatInputBox = ({ onSendMessage, placeholder, disableCorrections }:
 
     return (
         <form onSubmit={handleSendMessage}
-            className="flex flex-row items-center h-16 bg-white w-full px-4 rounded-xl">
+            className="flex flex-row items-center h-16 bg-white w-full px-0 md:px-3 lg:px-4 rounded-xl">
             <div className="flex-grow">
                 <div className="relative w-full">
                     <input type="text" autoFocus className="flex w-full border rounded-xl text-gray-800 focus:outline-none focus:border-emerald-500 p-2"
@@ -33,10 +34,12 @@ export const ChatInputBox = ({ onSendMessage, placeholder, disableCorrections }:
                 </div>
             </div>
 
-            <div className="ml-4">
+            <div className="ml-2">
                 <button className="btn-primary">
-                    <span>Enviar</span>
-                    <i className="fa-regular fa-paper-plane"></i>
+                    <span>
+                        <Icon icon="fa-regular:paper-plane" />
+                    </span>
+                    {/* <i className="fa-regular fa-paper-plane"></i> */}
                 </button>
             </div>
         </form>

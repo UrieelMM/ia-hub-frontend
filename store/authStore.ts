@@ -65,6 +65,8 @@ const useAuthStore = create<AuthStore>((set) => ({
   logoutUser: async () => {
     try {
       localStorage.removeItem("userIAHUB");
+      localStorage.removeItem("threadIdChefAssistant");
+      localStorage.removeItem("threadIdStudyAssistant");
       await signOut(auth);
       set({ user: null });
     } catch (error: any) {

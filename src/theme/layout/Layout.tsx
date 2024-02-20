@@ -105,7 +105,7 @@ export const Layout = ({ children }: Props) => {
             <img
               className="w-12 rounded-full"
               src="https://res.cloudinary.com/dz5tntwl1/image/upload/v1707862083/_81fceb6f-a735-4a87-840e-d444994d21a3_kpnsko.jpg"
-              alt="IA HUB Logo"
+              alt="All Create AILogo"
             />
           </div>
           <span
@@ -113,15 +113,15 @@ export const Layout = ({ children }: Props) => {
               "w-0 opacity-0": isCompact,
             })}
           >
-            IA Hub
+            All Create AI
           </span>
         </div>
         <Spacer y={8} />
         <div className="flex items-center gap-3 lg:px-3 ">
           {user?.photoURL ? (
             <img
-              alt={user?.displayName || "Usuario"}
-              className="flex-none rounded-full w-8 lg:object-cover lg:rounded-lg lg:w-16"
+              alt={user.displayName || "Usuario"}
+              className="flex-none rounded-full w-8 h-8 lg:object-cover lg:rounded-lg lg:w-16 lg:h-16"
               src={user.photoURL}
             />
           ) : (
@@ -270,16 +270,16 @@ export const Layout = ({ children }: Props) => {
           </Tooltip>
         </div>
       </div>
-      <div className="w-full flex-1 flex-col p-4">
-        <header className="flex items-center justify-center gap-3 rounded-medium border-small border-divider p-4">
+      <div className="w-full h-[98vh] flex-1 flex-col p-4">
+        {/* <header className="flex items-center justify-center gap-3 rounded-medium border-small border-divider p-4">
           <h1
             style={{ margin: 0 }}
             className="font-sans text-lg text-center text-gray-700 font-bold tracking-tight lg:text-2xl sm:leading-none"
           >
-            IA HUB
+            All Create AI
             <br />
           </h1>
-        </header>
+        </header> */}
         <main className="mt-4 h-full w-full overflow-hidden">
           <div className="flex h-[100%] w-full flex-col gap-4 p-2 rounded-medium border-small border-divider">
             {/* <Outlet /> */}
