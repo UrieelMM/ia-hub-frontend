@@ -50,6 +50,7 @@ const TextToAudioPage = () => {
 
   const handlePostMessage = async (message: string, selectedVoice: string) => {
     setIsLoading(true);
+
     setMessages((prev) => [
       ...prev,
       { text: message, isGpt: false, type: "text" },

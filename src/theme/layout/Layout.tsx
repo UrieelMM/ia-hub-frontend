@@ -270,8 +270,8 @@ export const Layout = ({ children }: Props) => {
           </Tooltip>
         </div>
       </div>
-      <div className="w-full h-[98vh] flex-1 flex-col p-4">
-        {/* <header className="flex items-center justify-center gap-3 rounded-medium border-small border-divider p-4">
+      <div className="w-full  flex-1 flex-col p-4">
+        <header className="flex items-center justify-center gap-3 rounded-medium border-small border-divider p-4">
           <h1
             style={{ margin: 0 }}
             className="font-sans text-lg text-center text-gray-700 font-bold tracking-tight lg:text-2xl sm:leading-none"
@@ -279,7 +279,7 @@ export const Layout = ({ children }: Props) => {
             All Create AI
             <br />
           </h1>
-        </header> */}
+        </header>
         <main className="mt-4 h-full w-full overflow-hidden">
           <div className="flex h-[100%] w-full flex-col gap-4 p-2 rounded-medium border-small border-divider">
             {/* <Outlet /> */}

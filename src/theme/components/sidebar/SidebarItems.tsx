@@ -57,12 +57,12 @@ export const sectionItemsWithTeams: SidebarItem[] = [
         icon: "ph:translate-bold",
         title: "Traductor",
       },
-      {
-        key: "comparisons",
-        href: "/comparisons",
-        title: "Comparar opciones",
-        icon: "fluent:branch-compare-24-filled",
-      },
+      // {
+      //   key: "comparisons",
+      //   href: "/comparisons",
+      //   title: "Comparar opciones",
+      //   icon: "fluent:branch-compare-24-filled",
+      // },
     ],
   },
 ];

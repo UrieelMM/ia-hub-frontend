@@ -1,8 +1,8 @@
-import { set } from 'firebase/database';
+import { set } from "firebase/database";
 // userStore.ts
 
-import { create } from 'zustand';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { create } from "zustand";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "../firebase/firebase";
 
 interface User {
@@ -29,89 +29,136 @@ const useUserStore = create<UserStore>((set) => ({
   fetchUser: async (uid) => {
     try {
       const firestore = getFirestore();
-      const userDocRef = doc(firestore, 'users', uid);
+      const userDocRef = doc(firestore, "users", uid);
       const userDocSnapshot = await getDoc(userDocRef);
 
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-        console.log('userData:', userData);
-        localStorage.setItem('userIAHUB', JSON.stringify(userData));
+        console.log("userData:", userData);
+        localStorage.setItem("userIAHUB", JSON.stringify(userData));
         set({ user: userData as User });
       } else {
         set({ user: null });
-        localStorage.removeItem('userIAHUB');
+        localStorage.removeItem("userIAHUB");
       }
     } catch (error: any) {
-      console.error('Error al obtener información del usuario:', error.message);
+      console.error("Error al obtener información del usuario:", error.message);
       throw error;
     }
   },
   setUser: (user: User) => {
     set({ user });
     if (user) {
-      localStorage.setItem('userIAHUB', JSON.stringify(user));
+      localStorage.setItem("userIAHUB", JSON.stringify(user));
     } else {
-      localStorage.removeItem('userIAHUB');
+      localStorage.removeItem("userIAHUB");
     }
   },
-  setThreadIdStudyAssistant: (threadId: string) =>{
+  setThreadIdStudyAssistant: async (threadId: string) => {
     const currentUser = auth.currentUser;
-    if(currentUser){
+    if (currentUser) {
       const firestore = getFirestore();
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      setDoc(userDocRef, { threadIdStudyAssistant: threadId }, { merge: true });
+      const userDocRef = doc(firestore, "users", currentUser.uid);
+      await setDoc(
+        userDocRef,
+        { threadIdStudyAssistant: threadId },
+        { merge: true }
+      );
+      localStorage.setItem("threadIdStudyAssistant", threadId);
     }
   },
-  getThreadIdStudyAssistant: () => {
+  getThreadIdStudyAssistant: async () => {
     const currentUser = auth.currentUser;
-    if(currentUser){
+
+    if (currentUser) {
+      // Buscar en localStorage
+      const localStorageThreadId = localStorage.getItem(
+        "threadIdStudyAssistant"
+      );
+
+      if (localStorageThreadId) {
+        return localStorageThreadId;
+      }
+
+      // Si no está en localStorage, buscar en Firestore
       const firestore = getFirestore();
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      const userDocSnapshot = getDoc(userDocRef);
-      return userDocSnapshot.then((doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          return data.threadIdStudyAssistant;
+      const userDocRef = doc(firestore, "users", currentUser.uid);
+
+      try {
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+          const data = userDocSnapshot.data();
+          const threadIdFromFirestore = data.threadIdStudyAssistant;
+
+          // Guardar en localStorage para futuras consultas
+          localStorage.setItem("threadIdStudyAssistant", threadIdFromFirestore);
+
+          return threadIdFromFirestore;
         } else {
-          console.log('No such document!');
-          return '';
+          console.log("No such document!");
+          return "";
         }
-      }).catch((error) => {
-        console.log('Error getting document:', error);
-        return '';
-      });
+      } catch (error) {
+        console.log("Error getting document:", error);
+        return "";
+      }
     }
-    return '';
+    return ""; // Resuelve la promesa con un valor predeterminado si no hay usuario autenticado
   },
-  setThreadIdChefAssistant: (threadId: string) =>{
+  setThreadIdChefAssistant: async (threadId: string) => {
     const currentUser = auth.currentUser;
-    if(currentUser){
+    if (currentUser) {
       const firestore = getFirestore();
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      setDoc(userDocRef, { threadIdChefAssistant: threadId }, { merge: true });
+      const userDocRef = doc(firestore, "users", currentUser.uid);
+      await setDoc(
+        userDocRef,
+        { threadIdChefAssistant: threadId },
+        { merge: true }
+      );
+      localStorage.setItem("threadIdChefAssistant", threadId);
     }
   },
-  getThreadIdChefAssistant: () => {
+  getThreadIdChefAssistant: async () => {
     const currentUser = auth.currentUser;
-    if(currentUser){
+
+    if (currentUser) {
+      // Buscar en localStorage
+      const localStorageThreadId = localStorage.getItem(
+        "threadIdChefAssistant"
+      );
+
+      if (localStorageThreadId) {
+        return localStorageThreadId;
+      }
+
+      // Si no está en localStorage, buscar en Firestore
       const firestore = getFirestore();
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      const userDocSnapshot = getDoc(userDocRef);
-      return userDocSnapshot.then((doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          return data.threadIdChefAssistant;
+      const userDocRef = doc(firestore, "users", currentUser.uid);
+
+      try {
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+          const data = userDocSnapshot.data();
+          const threadIdFromFirestore = data.threadIdChefAssistant;
+
+          // Guardar en localStorage para futuras consultas
+          localStorage.setItem("threadIdChefAssistant", threadIdFromFirestore);
+
+          return threadIdFromFirestore;
         } else {
-          console.log('No such document!');
-          return '';
+          console.log("No such document!");
+          return "";
         }
-      }).catch((error) => {
-        console.log('Error getting document:', error);
-        return '';
-      });
+      } catch (error) {
+        console.log("Error getting document:", error);
+        return "";
+      }
     }
-    return '';
-  }
+
+    return "";
+  },
 }));
 
 export default useUserStore;

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+#root{
+  max-width: 100vh !important;
+}
+
 h1 {
   @apply text-2xl font-bold mb-4;
 }

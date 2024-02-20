@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   onSendMessage: (message: string, selectedOption: string) => void;
@@ -24,10 +25,12 @@ export const TextMessageBoxSelect = ({
 
   const handleSendMessage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!message.trim()) {
+    if (!message.trim()){
+      toast.error('Debes escribir un mensaje.')
       return;
     }
-    if (!selectedOption) {
+    if(!selectedOption){
+      toast.error('Debes seleccionar una opción.')
       return;
     }
     if (selectedOption === "") return;
@@ -39,14 +42,14 @@ export const TextMessageBoxSelect = ({
   return (
     <form
       onSubmit={handleSendMessage}
-      className="flex flex-row items-center h-16 bg-white w-full px-0 md:px-3 lg:px-4 rounded-xl"
+      className="flex flex-row items-end md:items-center h-16 bg-white w-full px-0 md:px-3 lg:px-4 rounded-xl"
     >
       <div className="flex-grow">
-        <div className="flex">
+        <div className="flex flex-col-reverse md:flex-row">
           <input
             type="text"
             autoFocus
-            className="w-full border rounded-xl text-gray-800 focus:outline-none focus:border-cyan-500 p-2"
+            className="w-full border mt-2 md:mt-0 rounded-xl text-gray-800 focus:outline-none focus:border-cyan-500 p-2"
             placeholder={placeholder}
             autoComplete={disableCorrections ? "on" : "off"}
             autoCorrect={disableCorrections ? "on" : "off"}
@@ -57,11 +60,11 @@ export const TextMessageBoxSelect = ({
 
           <select
             name="select"
-            className="w-2/5 ml-5 border rounded-xl text-gray-800 focus:outline-none focus:border-cyan-300 pl-4 h-10"
+            className="w-full md:w-2/5 ml-0 md:ml-4 border rounded-xl text-gray-800 focus:outline-none focus:border-cyan-300 pl-4 h-10"
             value={selectedOption}
             onChange={(e) => setSelectedOption(e.target.value)}
           >
-            <option value="">Seleccione</option>
+            <option value="">Selecciona</option>
             Selecciona una opción
             {options.map((option) => (
               <option key={option.id} value={option.id}>
