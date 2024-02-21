@@ -91,12 +91,12 @@ const ChefIAPage = () => {
     setMessages((prev) => [...prev, { message: message, isGpt: false }]);
 
     //TODO: USE CASE
-    const timeoutId = setTimeout(() => {
-      console.warn(
-        "La API tardó demasiado en responder. Recargando la página..."
-      );
-      getListMessages();
-    }, 70000);
+    // const timeoutId = setTimeout(() => {
+    //   console.warn(
+    //     "La API tardó demasiado en responder. Recargando la página..."
+    //   );
+    //   getListMessages();
+    // }, 70000);
 
     try {
       // TODO: USE CASE
@@ -124,7 +124,7 @@ const ChefIAPage = () => {
     } finally {
       setIsLoading(false);
       // Limpiar el temporizador si la respuesta llega antes de los 80 segundos
-      clearTimeout(timeoutId);
+      // clearTimeout(timeoutId);
     }
     setIsLoading(false);
   };

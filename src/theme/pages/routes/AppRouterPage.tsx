@@ -12,31 +12,30 @@ import Layout from "../../layout/Layout";
 export const AppRouterPage = () => {
 
   return (
-        <Router>
-          <Routes>
-            {/* Página de inicio de sesión */}
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Layout>
-                  <Outlet />
-                </Layout>
-              }
-            >
-              {/* Rutas específicas dentro del Layout */}
-              {menuRoutes.map((route) => (
-                <Route
-                  key={route.to}
-                  path={route.to}
-                  element={route.component}
-                />
-              ))}
-              <Route index element={<Navigate to={menuRoutes[0].to} />} />
-            </Route>
-          </Routes>
-        </Router>
+    <Router>
+    <Routes>
+      {/* Página de inicio de sesión */}
+      <Route path="/login" element={<LoginPage />} />
+  
+      {/* Rutas dentro del Layout */}
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <Outlet />
+          </Layout>
+        }
+      >
+        {menuRoutes.map((route) => (
+          <Route
+            key={route.to}
+            path={route.to}
+            element={route.component}
+          />
+        ))}
+        <Route index element={<Navigate to={menuRoutes[0].to} />} />
+      </Route>
+    </Routes>
+  </Router>
   );
 };

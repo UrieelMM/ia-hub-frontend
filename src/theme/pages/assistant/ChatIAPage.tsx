@@ -91,13 +91,13 @@ const ChatIAPage = () => {
     setMessages((prev) => [...prev, { message: message, isGpt: false }]);
 
     //TODO: USE CASE
-    const timeoutId = setTimeout(() => {
-      console.warn(
-        "La API tardó demasiado en responder. Recargando la página..."
-      );
-      // Recarga la página después de 40 segundos si no hay respuesta
-      getListMessages();
-    }, 50000);
+    // const timeoutId = setTimeout(() => {
+    //   console.warn(
+    //     "La API tardó demasiado en responder. Recargando la página..."
+    //   );
+    //   // Recarga la página después de 40 segundos si no hay respuesta
+    //   getListMessages();
+    // }, 50000);
 
     try {
       // TODO: USE CASE
@@ -125,7 +125,7 @@ const ChatIAPage = () => {
     } finally {
       setIsLoading(false);
       // Limpiar el temporizador si la respuesta llega antes de los 40 segundos
-      clearTimeout(timeoutId);
+      // clearTimeout(timeoutId);
     }
     setIsLoading(false);
   };

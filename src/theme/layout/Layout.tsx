@@ -66,10 +66,8 @@ export const Layout = ({ children }: Props) => {
           navigate("/login");
         }
       });
-      setTimeout(() => {
         setLoadingSession(false); 
         setComponentIsVisible(true);
-      }, 500);
       return () => unsubscribe();
   }, [navigate]);
 
@@ -155,7 +153,7 @@ export const Layout = ({ children }: Props) => {
           })}
         >
            <Tooltip
-            content="User Galery"
+            content="Galría"
             isDisabled={!isCompact}
             placement="right"
           >
@@ -181,13 +179,11 @@ export const Layout = ({ children }: Props) => {
                 variant="light"
               >
                 {isCompact ? (
-                <Link to="/user-galery">
                     <Icon
                       className="text-default-500"
                       icon="fluent-mdl2:photo-collection"
                       width={24}
                     />
-                </Link>
                 ) : (
                   "Galería"
                 )}
@@ -196,7 +192,7 @@ export const Layout = ({ children }: Props) => {
           </Tooltip>
           
           <Tooltip
-            content="User Configuration"
+            content="Configuración de usuario"
             isDisabled={!isCompact}
             placement="right"
           >
@@ -222,13 +218,11 @@ export const Layout = ({ children }: Props) => {
                 variant="light"
               >
                 {isCompact ? (
-                <Link to="/user-configuration">
                     <Icon
                       className="text-default-500"
                       icon="icon-park-outline:config"
                       width={24}
                     />
-                </Link>
                 ) : (
                   "Configuración"
                 )}
@@ -236,7 +230,7 @@ export const Layout = ({ children }: Props) => {
             </Link>
           </Tooltip>
           
-          <Tooltip content="Log Out" isDisabled={!isCompact} placement="right">
+          <Tooltip content="Cerrar sesión" isDisabled={!isCompact} placement="right">
             <Button
               onClick={handleLogout}
               className={cn(
