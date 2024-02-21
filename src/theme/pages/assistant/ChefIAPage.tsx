@@ -35,7 +35,7 @@ const ChefIAPage = () => {
     const getOrCreateThreadId = async () => {
       const threadId = await getThreadIdChefAssistant();
       if (threadId) {
-        setThreadId(threadId);
+        return setThreadId(threadId);
       } else {
         const id = await createThreadCase()
           setThreadId(id);

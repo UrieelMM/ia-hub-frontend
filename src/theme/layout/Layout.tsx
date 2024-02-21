@@ -27,7 +27,7 @@ export const Layout = ({ children }: Props) => {
   const loading = useLoadingStore((state) => state.loading);
 
   const [loadingSession, setLoadingSession] = useState(false);
-  const [componentIsVisible, setComponentIsVisible] = useState(false);
+  const [componentIsVisible, setComponentIsVisible] = useState(true);
 
   const navigate = useNavigate();
 
