@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  createThreadCase,
   getListMessagesCase,
   postQuestionCase,
 } from "../../../core";
@@ -12,6 +11,8 @@ import {
 } from "../../components";
 import useUserStore from "../../../../store/userStore";
 import "./assistants.css";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../../../firebase/firebase";
 
 interface Message {
   message: string;
@@ -26,23 +27,23 @@ const ChatIAPage = () => {
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
-  const { setThreadIdStudyAssistant, getThreadIdStudyAssistant } =
-    useUserStore();
+  const {getThreadIdStudyAssistant } = useUserStore();
 
   //Obtener el threadId y si no existe crear uno
-
   useEffect(() => {
-    const getOrCreateThreadId = async () => {
-      const threadId = await getThreadIdStudyAssistant();
-      if (threadId) {
-        setThreadId(threadId);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const threadId = await getThreadIdStudyAssistant();
+          setThreadId(threadId);
+        } catch (error) {
+          console.error("Error al obtener el threadId:", error);
+        }
       } else {
-        const id = await createThreadCase()
-          setThreadId(id);
-          setThreadIdStudyAssistant(id);
+        console.error("Usuario no autenticado");
       }
-    };
-    getOrCreateThreadId();
+    });
+    return () => unsubscribe();
   }, []);
 
   //get list messages when page load
@@ -129,6 +130,7 @@ const ChatIAPage = () => {
     }
     setIsLoading(false);
   };
+
 
   return (
     <div className="chat-container">

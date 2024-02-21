@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  createThreadCase,
   getListMessagesCase,
   postQuestionCase,
 } from "../../../core";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../../../firebase/firebase";
 import {
   IAMessages,
   MyMessages,
@@ -12,6 +13,7 @@ import {
 } from "../../components";
 import useUserStore from "../../../../store/userStore";
 import "./assistants.css";
+
 
 interface Message {
   message: string;
@@ -27,22 +29,24 @@ const ChefIAPage = () => {
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
-  const { setThreadIdChefAssistant, getThreadIdChefAssistant } =
+  const { getThreadIdChefAssistant } =
     useUserStore();
 
   //Obtener el threadId y si no existe crear uno
   useEffect(() => {
-    const getOrCreateThreadId = async () => {
-      const threadId = await getThreadIdChefAssistant();
-      if (threadId) {
-        return setThreadId(threadId);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const threadId = await getThreadIdChefAssistant();
+          setThreadId(threadId);
+        } catch (error) {
+          console.error("Error al obtener el threadId:", error);
+        }
       } else {
-        const id = await createThreadCase()
-          setThreadId(id);
-          setThreadIdChefAssistant(id);
+        console.error("Usuario no autenticado");
       }
-    };
-    getOrCreateThreadId();
+    });
+    return () => unsubscribe();
   }, []);
 
   //get list messages when page load

@@ -1,9 +1,15 @@
-import { set } from "firebase/database";
 // userStore.ts
 
 import { create } from "zustand";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { auth } from "../firebase/firebase";
+import { createThreadCase } from "../src/core";
 
 interface User {
   email: string;
@@ -67,6 +73,7 @@ const useUserStore = create<UserStore>((set) => ({
       localStorage.setItem("threadIdStudyAssistant", threadId);
     }
   },
+
   getThreadIdStudyAssistant: async () => {
     const currentUser = auth.currentUser;
 
@@ -89,11 +96,20 @@ const useUserStore = create<UserStore>((set) => ({
 
         if (userDocSnapshot.exists()) {
           const data = userDocSnapshot.data();
-          const threadIdFromFirestore = data.threadIdStudyAssistant;
+          let threadIdFromFirestore = data.threadIdStudyAssistant;
+
+          if (!threadIdFromFirestore) {
+            // Si no existe en Firestore, llamar a createThreadCase() para obtener un nuevo ID
+            threadIdFromFirestore = await createThreadCase();
+
+            // Actualizar Firestore con el nuevo ID
+            await updateDoc(userDocRef, {
+              threadIdStudyAssistant: threadIdFromFirestore,
+            });
+          }
 
           // Guardar en localStorage para futuras consultas
           localStorage.setItem("threadIdStudyAssistant", threadIdFromFirestore);
-
           return threadIdFromFirestore;
         } else {
           console.log("No such document!");
@@ -106,6 +122,7 @@ const useUserStore = create<UserStore>((set) => ({
     }
     return ""; // Resuelve la promesa con un valor predeterminado si no hay usuario autenticado
   },
+
   setThreadIdChefAssistant: async (threadId: string) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -119,6 +136,7 @@ const useUserStore = create<UserStore>((set) => ({
       localStorage.setItem("threadIdChefAssistant", threadId);
     }
   },
+
   getThreadIdChefAssistant: async () => {
     const currentUser = auth.currentUser;
 
@@ -141,7 +159,17 @@ const useUserStore = create<UserStore>((set) => ({
 
         if (userDocSnapshot.exists()) {
           const data = userDocSnapshot.data();
-          const threadIdFromFirestore = data.threadIdChefAssistant;
+          let threadIdFromFirestore = data.threadIdChefAssistant;
+
+          if (!threadIdFromFirestore) {
+            // Si no existe en Firestore, llamar a createThreadCase() para obtener un nuevo ID
+            threadIdFromFirestore = await createThreadCase();
+
+            // Actualizar Firestore con el nuevo ID
+            await updateDoc(userDocRef, {
+              threadIdChefAssistant: threadIdFromFirestore,
+            });
+          }
 
           // Guardar en localStorage para futuras consultas
           localStorage.setItem("threadIdChefAssistant", threadIdFromFirestore);
