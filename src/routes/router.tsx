@@ -7,7 +7,6 @@ import GaleryPage from "../theme/pages/galery/GaleryPage";
 import TranslatePage from "../theme/pages/translate/TranslatePage";
 // import ComparisonsPage from "../theme/pages/comparisons/ComparisonsPage";
 import ChefIAPage from "../theme/pages/assistant/ChefIAPage";
-// import FeedbackPage from "../theme/pages/feedback/FeedbackPage";
 
 
 
@@ -60,12 +59,6 @@ export const menuRoutes = [
     description: 'Asistente de cocina para ayudarte a preparar deliciosas recetas de cocina',
     component: <ChefIAPage />,
   },
-  // {
-  //   to: '/feedback',
-  //   title: 'Asistente de Cocina',
-  //   description: 'Asistente de cocina para ayudarte a preparar deliciosas recetas de cocina',
-  //   component: <FeedbackPage />,
-  // },
   // {
   //   to: '/comparisons',
   //   title: 'Comparaciones',

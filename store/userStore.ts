@@ -5,7 +5,6 @@ import {
   getFirestore,
   doc,
   getDoc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { auth } from "../firebase/firebase";
@@ -23,9 +22,7 @@ interface UserStore {
   user: User | null;
   fetchUser: (uid: string) => Promise<void>;
   setUser: (user: User) => void;
-  setThreadIdStudyAssistant: (threadId: string) => void;
   getThreadIdStudyAssistant: () => string | Promise<any>;
-  setThreadIdChefAssistant: (threadId: string) => void;
   getThreadIdChefAssistant: () => string | Promise<any>;
 }
 
@@ -58,19 +55,6 @@ const useUserStore = create<UserStore>((set) => ({
       localStorage.setItem("userIAHUB", JSON.stringify(user));
     } else {
       localStorage.removeItem("userIAHUB");
-    }
-  },
-  setThreadIdStudyAssistant: async (threadId: string) => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const firestore = getFirestore();
-      const userDocRef = doc(firestore, "users", currentUser.uid);
-      await setDoc(
-        userDocRef,
-        { threadIdStudyAssistant: threadId },
-        { merge: true }
-      );
-      localStorage.setItem("threadIdStudyAssistant", threadId);
     }
   },
 
@@ -121,20 +105,6 @@ const useUserStore = create<UserStore>((set) => ({
       }
     }
     return ""; // Resuelve la promesa con un valor predeterminado si no hay usuario autenticado
-  },
-
-  setThreadIdChefAssistant: async (threadId: string) => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const firestore = getFirestore();
-      const userDocRef = doc(firestore, "users", currentUser.uid);
-      await setDoc(
-        userDocRef,
-        { threadIdChefAssistant: threadId },
-        { merge: true }
-      );
-      localStorage.setItem("threadIdChefAssistant", threadId);
-    }
   },
 
   getThreadIdChefAssistant: async () => {

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, ScrollShadow, Spacer, Tooltip } from "@nextui-org/react";
-import { Loading, Notify, Sidebar } from "../components";
+import { FeedbackModal, Loading, Notify, Sidebar } from "../components";
 import { Icon } from "@iconify/react";
 import { useMediaQuery } from "usehooks-ts";
 import { auth } from "../../../firebase/firebase";
@@ -17,10 +17,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-
 export const Layout = ({ children }: Props) => {
   const isCompact = useMediaQuery("(max-width: 768px)");
   const [currentPath, setCurrentPath] = useState<string>("");
+  const [showModalFeedback, setShowModalFeedback] = useState(false);
 
   const logoutUser = useAuthStore((state) => state.logoutUser);
   const { user, fetchUser, setUser } = useUserStore();
@@ -61,15 +61,19 @@ export const Layout = ({ children }: Props) => {
 
   useEffect(() => {
     setLoadingSession(true);
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        if (!user) {
-          navigate("/login");
-        }
-      });
-        setLoadingSession(false); 
-        setComponentIsVisible(true);
-      return () => unsubscribe();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        navigate("/login");
+      }
+    });
+    setLoadingSession(false);
+    setComponentIsVisible(true);
+    return () => unsubscribe();
   }, [navigate]);
+
+  const handleShowModalFeedback = () => {
+    setShowModalFeedback(!showModalFeedback);
+  };
 
   if (loadingSession) {
     return <Loading />;
@@ -152,11 +156,7 @@ export const Layout = ({ children }: Props) => {
             "items-center": isCompact,
           })}
         >
-           <Tooltip
-            content="Galría"
-            isDisabled={!isCompact}
-            placement="right"
-          >
+          <Tooltip content="Galría" isDisabled={!isCompact} placement="right">
             <Link to="/user-galery">
               <Button
                 fullWidth
@@ -169,67 +169,65 @@ export const Layout = ({ children }: Props) => {
                 isIconOnly={isCompact}
                 startContent={
                   isCompact ? null : (
-                      <Icon
-                        className="text-default-500"
-                        icon="fluent-mdl2:photo-collection"
-                        width={24}
-                      />
-                  )
-                }
-                variant="light"
-              >
-                {isCompact ? (
                     <Icon
                       className="text-default-500"
                       icon="fluent-mdl2:photo-collection"
                       width={24}
                     />
+                  )
+                }
+                variant="light"
+              >
+                {isCompact ? (
+                  <Icon
+                    className="text-default-500"
+                    icon="fluent-mdl2:photo-collection"
+                    width={24}
+                  />
                 ) : (
                   "Galería"
                 )}
               </Button>
             </Link>
           </Tooltip>
+          {showModalFeedback && (
+            <FeedbackModal handleShowModalFeedback={handleShowModalFeedback} />
+          )}
 
-          {/* <Tooltip
-            content="Feedback"
-            isDisabled={!isCompact}
-            placement="right"
-          >
-            <Link to="/feedback">
-              <Button
-                fullWidth
-                className={cn(
-                  "justify-start truncate text-default-500 data-[hover=true]:text-foreground",
-                  {
-                    "justify-center": isCompact,
-                  }
-                )}
-                isIconOnly={isCompact}
-                startContent={
-                  isCompact ? null : (
-                      <Icon
-                        className="text-default-500"
-                        icon="material-symbols:feedback-outline-sharp"
-                        width={24}
-                      />
-                  )
+          <Tooltip content="Feedback" isDisabled={!isCompact} placement="right">
+            <Button
+              onClick={handleShowModalFeedback}
+              fullWidth
+              className={cn(
+                "justify-start truncate text-default-500 data-[hover=true]:text-foreground",
+                {
+                  "justify-center": isCompact,
                 }
-                variant="light"
-              >
-                {isCompact ? (
-                    <Icon
-                      className="text-default-500"
-                      icon="material-symbols:feedback-outline-sharp"
-                      width={24}
-                    />
-                ) : (
-                  "Feedback"
-                )}
-              </Button>
-            </Link>
-          </Tooltip> */}
-          
+              )}
+              isIconOnly={isCompact}
+              startContent={
+                isCompact ? null : (
+                  <Icon
+                    className="text-default-500"
+                    icon="material-symbols:feedback-outline-sharp"
+                    width={24}
+                  />
+                )
+              }
+              variant="light"
+            >
+              {isCompact ? (
+                <Icon
+                  className="text-default-500"
+                  icon="material-symbols:feedback-outline-sharp"
+                  width={24}
+                />
+              ) : (
+                "Feedback"
+              )}
+            </Button>
+          </Tooltip>
+
           <Tooltip
             content="Configuración de usuario"
             isDisabled={!isCompact}
@@ -247,29 +245,33 @@ export const Layout = ({ children }: Props) => {
                 isIconOnly={isCompact}
                 startContent={
                   isCompact ? null : (
-                      <Icon
-                        className="text-default-500"
-                        icon="icon-park-outline:config"
-                        width={24}
-                      />
-                  )
-                }
-                variant="light"
-              >
-                {isCompact ? (
                     <Icon
                       className="text-default-500"
                       icon="icon-park-outline:config"
                       width={24}
                     />
+                  )
+                }
+                variant="light"
+              >
+                {isCompact ? (
+                  <Icon
+                    className="text-default-500"
+                    icon="icon-park-outline:config"
+                    width={24}
+                  />
                 ) : (
                   "Configuración"
                 )}
               </Button>
             </Link>
           </Tooltip>
-          
-          <Tooltip content="Cerrar sesión" isDisabled={!isCompact} placement="right">
+
+          <Tooltip
+            content="Cerrar sesión"
+            isDisabled={!isCompact}
+            placement="right"
+          >
             <Button
               onClick={handleLogout}
               className={cn(
@@ -312,7 +314,9 @@ export const Layout = ({ children }: Props) => {
             All CREATE AI
             <br />
           </h1>
-          <p className="bg-emerald-300 align-middle inline-block text-white m-0 text-[10px] px-2 rounded-xl">BETA</p>
+          <p className="bg-emerald-300 align-middle inline-block text-white m-0 text-[10px] px-2 rounded-xl">
+            BETA
+          </p>
         </header>
         <main className="mt-4 h-full w-full overflow-hidden">
           <div className="flex h-[100%] w-full flex-col gap-4 p-2 rounded-medium border-small border-divider">
