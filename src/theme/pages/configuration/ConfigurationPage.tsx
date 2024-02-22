@@ -18,7 +18,6 @@ import useUserStore from "../../../../store/userStore";
 import useAuthStore from "../../../../store/authStore";
 import { auth } from "../../../../firebase/firebase";
 import { LoadingButton } from "../../components";
-import { set } from "firebase/database";
 
 const ConfigurationPage = (props: CardProps) => {
   const { user, fetchUser, setUser } = useUserStore();
@@ -47,11 +46,6 @@ const ConfigurationPage = (props: CardProps) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!newDisplayName.trim() || !newEmail.trim()) {
-      console.error("El nombre de usuario y el email son necesarios");
-      return;
-    }
-
     const uid = user?.uid;
 
     try {
@@ -63,10 +57,14 @@ const ConfigurationPage = (props: CardProps) => {
         return;
       }
 
-      if (newDisplayName !== user?.displayName) {
-        await changeDisplayName(newDisplayName);
-        fetchUser(uid!);
-        toast.success("Nombre de usuario actualizado correctamente");
+      if (newDisplayName !== user?.displayName && newDisplayName) {
+        if(newDisplayName.length > 4){
+          await changeDisplayName(newDisplayName);
+          fetchUser(uid!);
+          toast.success("Nombre de usuario actualizado correctamente");
+        }else{
+          setError("El nombre de usuario debe tener al menos 4 caracteres");
+        }
       }
 
       // Separate password validation
@@ -148,7 +146,7 @@ const ConfigurationPage = (props: CardProps) => {
               onChange={(e) => setNewDisplayName(e.target.value)}
               label="Nombre de usuario"
               labelPlacement="outside"
-              placeholder="Ingresa tu nombre de usuario"
+              placeholder="Ingresa tu nuevo nombre de usuario"
             />
             {/* Email */}
             <Input

@@ -29,8 +29,7 @@ const ChefIAPage = () => {
 
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
-  const { getThreadIdChefAssistant } =
-    useUserStore();
+  const { getThreadIdChefAssistant } = useUserStore();
 
   //Obtener el threadId y si no existe crear uno
   useEffect(() => {

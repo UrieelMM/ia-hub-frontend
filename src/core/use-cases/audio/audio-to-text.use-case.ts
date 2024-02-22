@@ -1,5 +1,5 @@
 import { AudioToTextInterface } from "../../../interfaces";
-import { urlProd } from "../../urlPath";
+// import { urlProd } from "../../urlPath";
 
 export const audioToTextCase = async (audioFile: File, prompt?: string) => {
     try {
@@ -10,7 +10,7 @@ export const audioToTextCase = async (audioFile: File, prompt?: string) => {
             formData.append('prompt', prompt);
         }
 
-        const resp = await fetch(`${urlProd}/gpt/audio-to-text`, {
+        const resp = await fetch(`https://ai-create-hub-877e33d37582.herokuapp.com/api/gpt/audio-to-text`, {
             method: 'POST',
             body: formData,
         });

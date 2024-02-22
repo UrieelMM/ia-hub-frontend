@@ -55,7 +55,7 @@ export const LoginPage = () => {
             />
           </div>
           <div className="6">
-            <p className="font-medium ml-1">All Create AI</p>
+            <p className="font-medium ml-1">All CREATE AI</p>
           </div>
         </div>
       </div>
